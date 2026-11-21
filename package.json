@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node scripts/verify.mjs && node scripts/lobby.test.mjs && node scripts/narrative.test.mjs && node scripts/plantilla.test.mjs",
+    "test": "node scripts/verify.mjs && node scripts/lobby.test.mjs && node scripts/narrative.test.mjs && node scripts/plantilla.test.mjs && node scripts/editor.test.mjs",
     "actividad": "node scripts/usar-actividad.mjs"
   },
   "devDependencies": { "jsdom": "^24.1.3" }

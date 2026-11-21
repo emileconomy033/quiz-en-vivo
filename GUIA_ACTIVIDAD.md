@@ -1,5 +1,12 @@
 # Guía para crear una actividad
 
+## Dos caminos
+
+1. **Editor del panel** (con la sala en espera, solo el propietario): escribes preguntas, alternativas, la correcta y los recuadros «qué decir si la mayoría…». Se guarda en la sala (`rooms/{id}.activity`) y reemplaza a la actividad del archivo mientras exista. Sirve para actividades rápidas; permite descargar y cargar un `.json`.
+2. **Archivo `contenido/actividad.js`** (esta guía): para actividades más ricas, con teoría, citas y material de apoyo. Es la actividad por defecto si la sala no tiene una propia.
+
+El editor usa estos campos extra: `ifCorrect` (qué decir si la mayoría acierta), `ifSplit` (si el grupo se divide) y `hint` (si la mayoría elige cada alternativa errónea). También funcionan en el archivo.
+
 Todo se define en [`contenido/actividad.js`](contenido/actividad.js). La plataforma no necesita cambios de código para una actividad nueva. Si el archivo tiene un error, la página muestra un mensaje claro y `npm test` lo detecta antes de publicar.
 
 El texto admite `**frase**` para resaltar una idea (amarillo en el guion hablado, negrita en el respaldo).

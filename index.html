@@ -93,6 +93,13 @@ mark.hl{background:linear-gradient(transparent 10%,#ffe27a 10%,#ffe27a 90%,trans
 .alt-row{margin:4px 0;color:#4c5f66}.alt-row.good{color:#1d6a42;font-weight:700}
 .detail-row{display:grid;grid-template-columns:1fr auto auto;gap:4px 12px;align-items:center;margin:9px 0}.detail-row .barbg{grid-column:1/-1}
 #questionTabs button.locked{opacity:.55;cursor:not-allowed}
+.editor-panel .editor>summary{cursor:pointer;font-weight:800;color:var(--acento-oscuro);padding:4px 0}
+.ed-field{display:block;margin:10px 0;font-size:13px;font-weight:700;color:#33474f}.ed-field input,.ed-field textarea{display:block;width:100%;margin-top:5px;font:15px/1.5 inherit;font-weight:400}
+.ed-q{margin:10px 0;border:1px solid #d3dfd9;border-radius:5px;background:#fff;padding:2px 14px}.ed-q>summary{cursor:pointer;font-weight:700;padding:9px 0;color:var(--tinta)}
+.ed-tools,.ed-actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.ed-btn{padding:6px 12px;font-size:13px}
+.ed-alts{margin:12px 0}.ed-alt{display:flex;align-items:center;gap:8px;margin:6px 0}.ed-alt input[type=text]{flex:1;margin:0}.ed-alt input[type=radio]{width:20px;height:20px;flex:none}.ed-letter{font-weight:800;width:22px}
+.ed-guide{margin:14px 0;padding:12px 14px;border-left:5px solid var(--primario);background:#f1f9f4;border-radius:4px}
+.tp-note.err{color:#a3331f;font-weight:700}
 .times-panel{margin:12px 0 18px;padding:13px 17px;border:1px solid #d3dfd9;border-radius:5px;background:#fbfdfb}
 .times-panel h4{margin:0 0 6px;font-size:15px}.times-panel .time-grid{margin:8px 0}.times-panel .tp-note{font-size:13px;color:#4f685c;margin:6px 0}
 .projection-screen{position:fixed;inset:0;z-index:80;overflow:auto;padding:clamp(20px,4vw,60px);background:#f5f7f6;color:#24394a}
@@ -115,7 +122,7 @@ mark.hl{background:linear-gradient(transparent 10%,#ffe27a 10%,#ffe27a 90%,trans
 <section id="moderatorLogin" class="card hidden"><h2>Acceso para expositores</h2><label for="moderatorEmail">Correo de expositor</label><input id="moderatorEmail" type="email" autocomplete="username" placeholder="correo@ejemplo.com"><label for="moderatorPassword">Contraseña del expositor</label><input id="moderatorPassword" type="password" autocomplete="current-password" placeholder="Contraseña"><div class="row" style="margin-top:16px"><button class="btn" id="moderatorEnter">Acceder</button><button class="btn secondary" id="moderatorBack">Volver</button></div></section>
 <section id="presenterEntry" class="card hidden"><h2>Entrar a la sala existente</h2><label for="presenterRoomCode">Código de la sala única</label><input id="presenterRoomCode" maxlength="8" autocomplete="off" placeholder="Código compartido"><div class="row" style="margin-top:16px"><button class="btn" id="presenterOpen">Abrir panel de exposición</button><button class="btn secondary" id="presenterBack">Volver al inicio</button></div></section>
 <section id="create" class="card hidden"><h2>Mi sala · propietario</h2><input id="mode" type="hidden" value="competition"><div class="mode-locked"><strong>Competencia dirigida</strong><span> El avance de preguntas lo controlan los expositores.</span></div><div id="durationEditor"><h3>Tiempo de respuesta por pregunta</h3><div id="durationFields" class="time-grid"></div><button class="btn secondary" id="sameTime" type="button">Aplicar el tiempo de P1 a todas</button></div><div class="row"><button class="btn" id="createRoom">Abrir mi sala · crear solo si no existe</button><button class="btn secondary" id="cancelCreate">Volver</button></div></section>
-<section id="host" class="hidden"><div class="card"><div class="row between"><div><div class="eyebrow">Panel privado del moderador</div><h2 id="hostCode"></h2></div><span class="pill" id="hostStatus"></span></div><div class="room-readiness" id="roomReadiness" role="status" aria-live="polite"></div><div class="times-panel" id="timesPanel"></div><p class="small" id="ackInfo" aria-live="polite"></p><div class="row"><div id="qr" aria-label="Código QR para unirse"></div><div style="flex:1;min-width:200px"><p>Acceso de participantes</p><a id="joinUrl" target="_blank" rel="noopener noreferrer"></a><div class="row" style="margin-top:12px"><button class="btn secondary" id="copyLink">Copiar enlace</button><button class="btn secondary" id="downloadQR">Guardar QR</button><button class="btn secondary" id="hostHome">Volver al inicio</button><button class="btn secondary" id="newActivity">Volver a mi sala</button></div></div></div><div class="attendance-panel"><div class="row between"><strong id="attendanceCount" aria-live="polite">0 inscritos</strong><button class="btn secondary" id="refreshAttendees">Actualizar participantes</button></div><div class="ready-metrics" aria-live="polite"><div><strong id="readyCount">0</strong><span>Listos</span></div><div><strong id="pendingCount">0</strong><span>Pendientes</span></div></div><div class="ready-track" role="progressbar" aria-label="Confirmaciones de preparación" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="readyProgress"><div id="readyProgressFill"></div></div><p id="attendanceStatus" class="small" role="status">Conectando con Firebase…</p><div id="attendanceNames" class="attendance-names" aria-live="polite"></div></div><p id="hostHint" class="small"></p><details id="sessionScript" class="presenter-access"></details><section id="presenterAccess" class="presenter-access"><h3>Segundo expositor autorizado</h3><div class="row"><input id="presenterInviteEmail" type="email" placeholder="Correo del segundo expositor" style="flex:1;min-width:210px"><button class="btn secondary" id="savePresenter">Autorizar expositor</button><button class="btn secondary" id="removePresenter">Revocar acceso</button></div><p id="presenterInviteStatus" class="small" role="status"></p></section><div id="simulationWarning" class="notice hidden" role="status">SIMULACIÓN · DATOS FICTICIOS</div><div class="row"><button class="btn" id="start">Abrir encuesta</button><button class="btn warning hidden" id="startAnyway" type="button">Iniciar solo con los listos</button><button class="btn secondary" id="next">Siguiente pregunta</button><button class="btn secondary" id="reveal">Revelar respuesta</button><button class="btn warning" id="finish">Cerrar y mostrar resultados</button><button class="btn warning" id="resetOfficial">Reiniciar ensayo · conservar QR</button><span class="small" id="stageGuide" aria-live="polite"></span></div></div><div class="card"><div class="row between"><h2>Estadísticas del grupo</h2><div class="row"><button class="btn" id="openAudienceWindow">Abrir pantalla para compartir</button><button class="btn secondary" id="showPublicWelcome">Mostrar portada y QR</button><button class="btn secondary" id="showPublicQuestion">Mostrar pregunta al público</button><button class="btn secondary" id="exportCSV">Exportar CSV</button><button class="btn secondary" id="printReport">Informe PDF</button></div></div><div id="completedActions" class="card hidden" style="margin:18px 0"><h2>Dinámica finalizada</h2><p></p><div class="row"><button class="btn secondary" id="completedHome">Volver al inicio</button></div></div><div id="metrics" class="grid"></div><h3>Desempeño por pregunta</h3><div id="summary"></div><div class="tabs" id="questionTabs"></div><div class="row" style="margin:15px 0"><button class="btn secondary" id="hostNotesView">Guion privado del expositor</button><button class="btn secondary" id="hostPublicView">Previsualizar vista del público</button></div><div id="hostChart"></div><div id="countries"></div><section id="finalLearning" class="learning-summary" aria-live="polite"></section></div></section>
+<section id="host" class="hidden"><div class="card"><div class="row between"><div><div class="eyebrow">Panel privado del moderador</div><h2 id="hostCode"></h2></div><span class="pill" id="hostStatus"></span></div><div class="room-readiness" id="roomReadiness" role="status" aria-live="polite"></div><div class="times-panel" id="timesPanel"></div><div class="times-panel editor-panel hidden" id="editorPanel"></div><p class="small" id="ackInfo" aria-live="polite"></p><div class="row"><div id="qr" aria-label="Código QR para unirse"></div><div style="flex:1;min-width:200px"><p>Acceso de participantes</p><a id="joinUrl" target="_blank" rel="noopener noreferrer"></a><div class="row" style="margin-top:12px"><button class="btn secondary" id="copyLink">Copiar enlace</button><button class="btn secondary" id="downloadQR">Guardar QR</button><button class="btn secondary" id="hostHome">Volver al inicio</button><button class="btn secondary" id="newActivity">Volver a mi sala</button></div></div></div><div class="attendance-panel"><div class="row between"><strong id="attendanceCount" aria-live="polite">0 inscritos</strong><button class="btn secondary" id="refreshAttendees">Actualizar participantes</button></div><div class="ready-metrics" aria-live="polite"><div><strong id="readyCount">0</strong><span>Listos</span></div><div><strong id="pendingCount">0</strong><span>Pendientes</span></div></div><div class="ready-track" role="progressbar" aria-label="Confirmaciones de preparación" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="readyProgress"><div id="readyProgressFill"></div></div><p id="attendanceStatus" class="small" role="status">Conectando con Firebase…</p><div id="attendanceNames" class="attendance-names" aria-live="polite"></div></div><p id="hostHint" class="small"></p><details id="sessionScript" class="presenter-access"></details><section id="presenterAccess" class="presenter-access"><h3>Segundo expositor autorizado</h3><div class="row"><input id="presenterInviteEmail" type="email" placeholder="Correo del segundo expositor" style="flex:1;min-width:210px"><button class="btn secondary" id="savePresenter">Autorizar expositor</button><button class="btn secondary" id="removePresenter">Revocar acceso</button></div><p id="presenterInviteStatus" class="small" role="status"></p></section><div id="simulationWarning" class="notice hidden" role="status">SIMULACIÓN · DATOS FICTICIOS</div><div class="row"><button class="btn" id="start">Abrir encuesta</button><button class="btn warning hidden" id="startAnyway" type="button">Iniciar solo con los listos</button><button class="btn secondary" id="next">Siguiente pregunta</button><button class="btn secondary" id="reveal">Revelar respuesta</button><button class="btn warning" id="finish">Cerrar y mostrar resultados</button><button class="btn warning" id="resetOfficial">Reiniciar ensayo · conservar QR</button><span class="small" id="stageGuide" aria-live="polite"></span></div></div><div class="card"><div class="row between"><h2>Estadísticas del grupo</h2><div class="row"><button class="btn" id="openAudienceWindow">Abrir pantalla para compartir</button><button class="btn secondary" id="showPublicWelcome">Mostrar portada y QR</button><button class="btn secondary" id="showPublicQuestion">Mostrar pregunta al público</button><button class="btn secondary" id="exportCSV">Exportar CSV</button><button class="btn secondary" id="printReport">Informe PDF</button></div></div><div id="completedActions" class="card hidden" style="margin:18px 0"><h2>Dinámica finalizada</h2><p></p><div class="row"><button class="btn secondary" id="completedHome">Volver al inicio</button></div></div><div id="metrics" class="grid"></div><h3>Desempeño por pregunta</h3><div id="summary"></div><div class="tabs" id="questionTabs"></div><div class="row" style="margin:15px 0"><button class="btn secondary" id="hostNotesView">Guion privado del expositor</button><button class="btn secondary" id="hostPublicView">Previsualizar vista del público</button></div><div id="hostChart"></div><div id="countries"></div><section id="finalLearning" class="learning-summary" aria-live="polite"></section></div></section>
 <section id="projection" class="hidden projection-screen" aria-label="Presentación de resultados">
 <div class="projection-top"><div><span class="kicker" id="brandKicker"></span><h2 id="projectHeading"></h2></div><span class="project-stage" id="projectStage">Sala de espera</span></div>
 <div id="projectChart"></div><div id="projectSimulationWarning" class="notice hidden">SIMULACIÓN DOCENTE · DATOS FICTICIOS</div><div class="projection-foot"><span id="projectIndicator"></span><span id="projectPrivacy"></span></div>
@@ -127,8 +134,8 @@ mark.hl{background:linear-gradient(transparent 10%,#ffe27a 10%,#ffe27a 90%,trans
 'use strict';
 /* El contenido de la actividad vive en contenido/actividad.js (ver GUIA_ACTIVIDAD.md); el motor no contiene texto del curso. */
 const APP=window.APP_CONFIG||{};
-const ACT=window.ACTIVIDAD;
-const MARCA=(ACT&&ACT.marca)||{},CIERRE=(ACT&&ACT.cierre)||{};
+const FILE_ACTIVITY=window.ACTIVIDAD;
+let ACT=FILE_ACTIVITY,MARCA={},CIERRE={},activeActivityStr='';
 const LETTERS='ABCDEFGH';
 function validarActividad(a){
  if(!a||!Array.isArray(a.preguntas)||!a.preguntas.length)throw new Error('Falta contenido/actividad.js o no define «preguntas».');
@@ -142,11 +149,32 @@ function validarActividad(a){
   ['dis','trap','hint'].forEach(k=>{if(p[k]&&p[k].length!==p.a.length)throw new Error(n+'«'+k+'» debe tener una entrada por alternativa (null en la correcta).')});
  });
 }
-validarActividad(ACT);
-const QUIZ_BASE=ACT.preguntas.map(p=>({q:p.q,a:[...p.a],correct:p.correct,why:p.why||'',topic:p.topic||''}));
-const PEDAGOGY_BASE=ACT.preguntas.map(p=>({...p,principle:p.principle||p.why||'',mis:p.mis?[...p.mis]:p.a.map((_,j)=>j===p.correct?null:'esta alternativa no es la correcta.'),transfer:p.transfer||'',question:p.question||''}));
-let QUIZ=QUIZ_BASE,PEDAGOGY=PEDAGOGY_BASE;
-const TRANSFER=Array.isArray(ACT.transferencia)?ACT.transferencia:[];
+validarActividad(FILE_ACTIVITY);
+function buildActivity(a){
+ return {
+  quiz:a.preguntas.map(p=>({q:p.q,a:[...p.a],correct:p.correct,why:p.why||'',topic:p.topic||''})),
+  ped:a.preguntas.map(p=>({...p,principle:p.principle||p.why||'',mis:p.mis?[...p.mis]:p.a.map((_,j)=>j===p.correct?null:'esta alternativa no es la correcta.'),transfer:p.transfer||'',question:p.question||''})),
+  transfer:Array.isArray(a.transferencia)?a.transferencia:[]
+ };
+}
+let QUIZ_BASE,PEDAGOGY_BASE,QUIZ,PEDAGOGY,TRANSFER;
+function loadActivity(a){
+ ACT=a;MARCA=a.marca||{};CIERRE=a.cierre||{};
+ const b=buildActivity(a);
+ QUIZ_BASE=b.quiz;PEDAGOGY_BASE=b.ped;TRANSFER=b.transfer;QUIZ=QUIZ_BASE;PEDAGOGY=PEDAGOGY_BASE;
+}
+loadActivity(FILE_ACTIVITY);
+/* Solo en ejecución (N ya existe). */
+function setActivity(a){validarActividad(a);loadActivity(a);N=QUIZ.length;applyBrand()}
+/* La sala puede traer su propia actividad (room.activity, JSON); si no, se usa el archivo. Devuelve true si cambió. */
+function applyRoomActivity(r){
+ const str=r&&typeof r.activity==='string'?r.activity:'';
+ if(str===activeActivityStr)return false;
+ let next=FILE_ACTIVITY;
+ if(str){try{next=JSON.parse(str)}catch(e){console.warn('Actividad de la sala ilegible; se usa la del archivo',e)}}
+ try{setActivity(next);activeActivityStr=str;return true}
+ catch(e){console.warn('Actividad de la sala inválida; se usa la del archivo',e);try{setActivity(FILE_ACTIVITY);activeActivityStr=str}catch{}return true}
+}
 const microResponses=new Map();
 function drawMicroTransfer(){
  const box=$('microTransfer');box.replaceChildren();
@@ -194,11 +222,12 @@ function resultMessage(rate){
  return 'Fue la pregunta más difícil: conviene retomar el concepto con un ejemplo adicional.';
 }
 /* La actividad es única por despliegue: quizVersion identifica el motor de la sala, no el contenido. */
+function slug(){return MARCA.archivo||'actividad'}
 function activateQuizVersion(){
  QUIZ=QUIZ_BASE;PEDAGOGY=PEDAGOGY_BASE;
  if(typeof N!=='undefined')N=QUIZ.length;
 }
-const $=x=>document.getElementById(x);const IDs=['setup','home','create','moderatorLogin','presenterEntry','host','participant','mySessions','projection'];const ALPH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const DEFAULT_SECONDS=Number.isInteger(APP.segundosPorPregunta)&&APP.segundosPorPregunta>=10&&APP.segundosPorPregunta<=180?APP.segundosPorPregunta:40;const UNIQUE_ROOM_KEY='comparisonPermanentRoomId';let N=QUIZ.length;const MODERATOR_EMAIL=APP.moderadorEmail||'';const DEFAULT_PRESENTER_EMAIL=APP.segundoExpositorEmail||'';const SLUG=MARCA.archivo||'actividad';const RELEASE_ID='2026-11-18-portada-sincronizada1';
+const $=x=>document.getElementById(x);const IDs=['setup','home','create','moderatorLogin','presenterEntry','host','participant','mySessions','projection'];const ALPH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';const DEFAULT_SECONDS=Number.isInteger(APP.segundosPorPregunta)&&APP.segundosPorPregunta>=10&&APP.segundosPorPregunta<=180?APP.segundosPorPregunta:40;const UNIQUE_ROOM_KEY='comparisonPermanentRoomId';let N=QUIZ.length;const MODERATOR_EMAIL=APP.moderadorEmail||'';const DEFAULT_PRESENTER_EMAIL=APP.segundoExpositorEmail||'';const RELEASE_ID='2026-11-18-portada-sincronizada1';
 function renderSessionScript(){
  const box=$('sessionScript');if(!box)return;
  const h=Math.ceil(N/2),pr=(a,b)=>a===b?'Pregunta '+a:'Preguntas '+a+' a '+b;
@@ -224,8 +253,8 @@ function applyBrand(){
  const c=MARCA.colores||{},st=document.documentElement.style;
  [['primario','--primario'],['primarioOscuro','--primario-oscuro'],['acento','--acento'],['acentoOscuro','--acento-oscuro'],['tinta','--tinta']].forEach(([k,v])=>{if(/^#[0-9a-fA-F]{6}$/.test(c[k]||''))st.setProperty(v,c[k])});
  if(Array.isArray(MARCA.paises)){const sel=$('country');if(sel){sel.replaceChildren();const o0=document.createElement('option');o0.value='';o0.textContent='Prefiero no indicar';sel.append(o0);MARCA.paises.forEach(p=>{const o=document.createElement('option');o.textContent=p;sel.append(o)})}}
- if($('moderatorEmail')&&MODERATOR_EMAIL)$('moderatorEmail').value=MODERATOR_EMAIL;
- if($('presenterInviteEmail')&&DEFAULT_PRESENTER_EMAIL)$('presenterInviteEmail').value=DEFAULT_PRESENTER_EMAIL;
+ if($('moderatorEmail')&&MODERATOR_EMAIL&&!$('moderatorEmail').value)$('moderatorEmail').value=MODERATOR_EMAIL;
+ if($('presenterInviteEmail')&&DEFAULT_PRESENTER_EMAIL&&!$('presenterInviteEmail').value)$('presenterInviteEmail').value=DEFAULT_PRESENTER_EMAIL;
  renderSessionScript();
 }
 applyBrand();
@@ -469,9 +498,11 @@ function speakScript(i){
   paras.push(s.rate===1
    ?[`Todo el grupo coincidió en la ${L}. No hay una confusión que desarmar; aprovechemos para explicar por qué funciona y llevarlo a otro caso.`,`Unanimidad en la ${L}: **${pct}**. Confirmémoslo en una frase y subamos de nivel.`][v]
    :[`Muy buen resultado: **${pct}** eligió la ${L}. El criterio está bastante claro, así que lo confirmamos rápido.`,`Casi todos coincidieron: **${pct}** en la ${L}. Solo nos queda aclarar la duda que quedó.`][v]);
+  if(G.ifCorrect)paras.push(G.ifCorrect);
   if(t&&hint(t.j))paras.push(`Para quien dudó con la ${tl}: ${hint(t.j)}`);
  }else if(s.kind==='most'){
   paras.push([`La mayoría acertó (**${pct}**), pero una parte del grupo se fue por otro lado. Vale la pena detenernos en esa duda.`,`Buen punto de partida: **${pct}** eligió la ${L} y el resto se repartió. Escuchemos primero qué llevó a otras personas a otra opción.`][v]);
+  if(G.ifCorrect)paras.push(G.ifCorrect);
   if(t&&hint(t.j))paras.push(`Detengámonos en la ${tl} (${tp}). ${hint(t.j)}`);
  }else if(s.kind==='dominant'){
   paras.push([`Aquí hubo una intuición compartida: **${tp}** eligió la ${tl}, «${q.a[t.j]}». No es un error tonto; es lo que muchos pensamos al principio.`,`El grupo se inclinó por la ${tl} (**${tp}**). Es una pista valiosa, porque nos muestra qué idea conviene revisar juntos.`][v]);
@@ -479,6 +510,7 @@ function speakScript(i){
   paras.push(`La correcta era la ${L}, con **${pct}**.`);
  }else{
   paras.push([`Las respuestas quedaron repartidas: solo **${pct}** eligió la ${L}. Eso nos dice que el criterio todavía no está asentado; construyámoslo paso a paso.`,`Hubo opiniones para todos los gustos y **${pct}** acertó. Pidamos a dos personas con respuestas distintas que defiendan su razonamiento.`][v]);
+  if(G.ifSplit)paras.push(G.ifSplit);
   if(t&&hint(t.j))paras.push(`Una de las opciones más elegidas fue la ${tl}. ${hint(t.j)}`);
  }
  if(G.core)paras.push(G.core);
@@ -683,11 +715,171 @@ async function removeParticipant(p){
  catch(e){alertText('No se pudo quitar al participante ('+(e.code||e.message)+'). Si el error es de permisos, publica las reglas actualizadas de Firestore o usa «Reiniciar ensayo».',true)}
 }
 /* Tiempos por pregunta de la sala real: se muestran los valores guardados en Firestore y el propietario puede cambiarlos con la sala en espera. */
+/* ===== Editor de la actividad: el propietario escribe preguntas con la sala en espera; se guarda en la sala (room.activity) ===== */
+let draft=null,draftDirty=false,draftFrom=null,editorOpenQ=new Set();
+const ALT_ARRAYS=['mis','dis','trap','hint'];
+function cloneJSON(o){return JSON.parse(JSON.stringify(o))}
+function blankQuestion(){return {topic:'',q:'',a:['',''],correct:0,why:''}}
+function altArrays(p,fn){ALT_ARRAYS.forEach(k=>{if(Array.isArray(p[k]))fn(p[k])})}
+function ensureHint(p){
+ if(!Array.isArray(p.hint))p.hint=p.a.map(()=>'');
+ while(p.hint.length<p.a.length)p.hint.push('');
+ p.hint.length=p.a.length;
+ p.hint[p.correct]=null;
+}
+function prepDraft(){
+ draft.marca=draft.marca||{};draft.cierre=draft.cierre||{};draft.preguntas=draft.preguntas||[];
+ draft.preguntas.forEach(ensureHint);
+}
+function editorAddAlt(p){p.a.push('');altArrays(p,arr=>arr.push(''));ensureHint(p)}
+function editorRemoveAlt(p,j){
+ if(p.a.length<=2)return;
+ p.a.splice(j,1);altArrays(p,arr=>arr.splice(j,1));
+ if(p.correct===j)p.correct=0;else if(p.correct>j)p.correct--;
+ ensureHint(p);
+}
+function editorSetCorrect(p,j){
+ const old=p.correct;
+ altArrays(p,arr=>{if(arr[old]==null)arr[old]='';arr[j]=null});
+ p.correct=j;ensureHint(p);
+}
+function cleanActivity(d){
+ const a=cloneJSON(d),t=v=>typeof v==='string'?v.trim():v;
+ a.preguntas=a.preguntas.map(p=>{
+  const o={...p};
+  ['topic','q','why','recall','cite','take','ifCorrect','ifSplit','core','strengthen','dato'].forEach(k=>{if(typeof o[k]==='string'){o[k]=t(o[k]);if(!o[k]&&k!=='topic')delete o[k]}});
+  o.a=o.a.map(t);
+  ALT_ARRAYS.forEach(k=>{if(Array.isArray(o[k])){o[k]=o[k].map((v,j)=>j===o.correct?null:(typeof v==='string'?t(v):v));if(o[k].every(v=>!v))delete o[k]}});
+  return o;
+ });
+ ['titulo','subtitulo','etiqueta'].forEach(k=>{if(typeof a.marca[k]==='string')a.marca[k]=t(a.marca[k])});
+ if(typeof a.cierre.frase==='string'){a.cierre.frase=t(a.cierre.frase);if(!a.cierre.frase)delete a.cierre.frase}
+ return a;
+}
+function editorNote(msg,isErr){const n=$('editorNote');if(n){n.textContent=msg||'';n.className='tp-note'+(isErr?' err':'')}}
+function markDirty(){draftDirty=true;const s=$('editorSave');if(s&&!s.dataset.locked)s.disabled=false;editorNote('Cambios sin guardar.')}
+function edField(label,el){const l=add('label',label,'ed-field');l.append(el);return l}
+function edInput(get,set,ph){const i=add('input');i.type='text';i.value=get()||'';i.placeholder=ph||'';i.oninput=()=>{set(i.value);markDirty()};return i}
+function edArea(get,set,ph,rows){const t=add('textarea');t.rows=rows||2;t.value=get()||'';t.placeholder=ph||'';t.oninput=()=>{set(t.value);markDirty()};return t}
+function edBtn(text,fn,title){const b=add('button',text,'btn secondary ed-btn');b.type='button';if(title)b.title=title;b.onclick=fn;return b}
+function editorQuestion(p,i){
+ const q=add('details',undefined,'ed-q'),key='edq'+i;persistOpen(q,key);
+ q.append(add('summary',`Pregunta ${i+1}${p.q?' · '+p.q.slice(0,70)+(p.q.length>70?'…':''):' · (sin enunciado)'}`));
+ const rebuild=()=>{markDirty();buildEditor()};
+ const tools=add('div',undefined,'ed-tools');
+ if(i>0)tools.append(edBtn('↑ Subir',()=>{const a=draft.preguntas;[a[i-1],a[i]]=[a[i],a[i-1]];rebuild()}));
+ if(i<draft.preguntas.length-1)tools.append(edBtn('↓ Bajar',()=>{const a=draft.preguntas;[a[i+1],a[i]]=[a[i],a[i+1]];rebuild()}));
+ if(draft.preguntas.length>1)tools.append(edBtn('Eliminar pregunta',()=>{if(confirm('¿Eliminar la pregunta '+(i+1)+'?')){draft.preguntas.splice(i,1);rebuild()}}));
+ q.append(tools);
+ q.append(edField('Tema (etiqueta corta)',edInput(()=>p.topic,v=>p.topic=v,'Ej.: Fundamento inicial')));
+ q.append(edField('Enunciado de la pregunta',edArea(()=>p.q,v=>p.q=v,'Escribe la pregunta tal como la verán los participantes',3)));
+ const alts=add('div',undefined,'ed-alts');alts.append(add('strong','Alternativas · marca con el círculo cuál es la correcta'));
+ p.a.forEach((txt,j)=>{
+  const row=add('div',undefined,'ed-alt'),r=add('input');r.type='radio';r.name='correct'+i;r.checked=p.correct===j;r.title='Es la correcta';
+  r.onchange=()=>{editorSetCorrect(p,j);rebuild()};
+  row.append(r,add('span',LETTERS[j]+'.','ed-letter'),edInput(()=>p.a[j],v=>p.a[j]=v,'Texto de la alternativa'));
+  if(p.a.length>2)row.append(edBtn('✕',()=>{editorRemoveAlt(p,j);rebuild()},'Quitar esta alternativa'));
+  alts.append(row);
+ });
+ if(p.a.length<6)alts.append(edBtn('+ Agregar alternativa',()=>{editorAddAlt(p);rebuild()}));
+ q.append(alts);
+ q.append(edField('Explicación que verán los participantes (por qué esa es la correcta)',edArea(()=>p.why,v=>p.why=v,'Una o dos frases',2)));
+ const guide=add('div',undefined,'ed-guide');
+ guide.append(add('strong','Para los expositores: ¿qué decir según lo que responda el grupo?'));
+ guide.append(add('p','Aparece como guion «Para decir» cuando se muestran los resultados. Si dejas un recuadro vacío, la plataforma usa una frase genérica.','small'));
+ guide.append(edField(`Si la mayoría acierta (la ${LETTERS[p.correct]})`,edArea(()=>p.ifCorrect,v=>p.ifCorrect=v,'Ej.: «Confirmemos el criterio y subamos de nivel: ¿cómo lo aplicarían a otro caso?»')));
+ p.a.forEach((txt,j)=>{if(j===p.correct)return;guide.append(edField(`Si la mayoría elige la ${LETTERS[j]}${txt?': «'+txt.slice(0,60)+(txt.length>60?'…':'')+'»':''}`,edArea(()=>p.hint[j],v=>p.hint[j]=v,'Por qué tienta y qué conviene aclarar')))});
+ guide.append(edField('Si las respuestas quedan repartidas',edArea(()=>p.ifSplit,v=>p.ifSplit=v,'Ej.: «Pidamos a dos personas con respuestas distintas que defiendan su razonamiento…»')));
+ guide.append(edField('Teoría o cita de apoyo (opcional)',edArea(()=>p.recall,v=>p.recall=v,'Ej.: «Recordemos a Autor: …»')));
+ guide.append(edField('Referencia (opcional)',edInput(()=>p.cite,v=>p.cite=v,'Ej.: Autor (2020, p. 12).')));
+ guide.append(edField('Idea para llevarse en el cierre (opcional)',edInput(()=>p.take,v=>p.take=v,'Una frase corta')));
+ q.append(guide);
+ return q;
+}
+function editorEditable(){return !!(isHost&&room&&!simulationMode&&room.owner===uid&&room.status==='lobby')}
+function buildEditor(){
+ const box=$('editorPanel');if(!box||!draft)return;
+ box.replaceChildren();
+ const editable=editorEditable(),det=persistOpen(add('details',undefined,'editor'),'editor');
+ det.append(add('summary',`Preguntas de la actividad (${draft.preguntas.length})`));
+ det.append(add('p','Escribe o ajusta las preguntas y guarda: la actividad queda en la sala y los celulares la reciben solos. Solo se puede cambiar con la sala en espera.','small'));
+ const g=add('div',undefined,'ed-general');
+ g.append(edField('Título de la actividad',edInput(()=>draft.marca.titulo,v=>draft.marca.titulo=v)),edField('Subtítulo',edInput(()=>draft.marca.subtitulo,v=>draft.marca.subtitulo=v)),edField('Línea superior (curso, evento o institución)',edInput(()=>draft.marca.etiqueta,v=>draft.marca.etiqueta=v)),edField('Frase final del cierre (opcional)',edArea(()=>draft.cierre.frase,v=>draft.cierre.frase=v,'Lo último que dirán los expositores',2)));
+ det.append(g);
+ draft.preguntas.forEach((p,i)=>det.append(editorQuestion(p,i)));
+ const row=add('div',undefined,'row ed-actions');
+ if(draft.preguntas.length<20)row.append(edBtn('+ Agregar pregunta',()=>{const p=blankQuestion();ensureHint(p);draft.preguntas.push(p);editorOpenQ.add('edq'+(draft.preguntas.length-1));openKeys.add('edq'+(draft.preguntas.length-1));markDirty();buildEditor()}));
+ const save=add('button','Guardar en la sala','btn');save.id='editorSave';save.type='button';save.disabled=!draftDirty;save.onclick=saveActivity;row.append(save);
+ row.append(edBtn('Descartar cambios',()=>{draft=null;draftDirty=false;renderEditor();editorNote('Cambios descartados.')}));
+ det.append(row);
+ const files=add('div',undefined,'row ed-actions');
+ files.append(edBtn('Descargar actividad (.json)',downloadActivity,'Guarda una copia para reutilizarla o subirla al repositorio'));
+ const inp=add('input');inp.type='file';inp.accept='.json,.js,application/json';inp.className='hidden';inp.id='editorFile';inp.onchange=loadActivityFile;
+ files.append(edBtn('Cargar desde archivo',()=>inp.click(),'Carga un archivo .json o .js descargado antes'),inp,edBtn('Volver a la actividad del archivo',useFileActivity,'Quita la actividad guardada en la sala y usa contenido/actividad.js'));
+ det.append(files);
+ const note=add('p',undefined,'tp-note');note.id='editorNote';det.append(note);
+ box.append(det);
+ box.dataset.locked=editable?'':'1';
+ if(!editable){det.querySelectorAll('input,textarea,button').forEach(el=>{el.disabled=true});det.insertBefore(add('p','Solo el propietario puede editar, con la sala en espera.','tp-note err'),det.children[2])}
+ else if(!draftDirty)save.disabled=true;
+}
+function renderEditor(){
+ const box=$('editorPanel');if(!box)return;
+ const show=!!(isHost&&room&&!simulationMode&&room.owner===uid);
+ box.classList.toggle('hidden',!show);
+ if(!show)return;
+ const lockKey=String(editorEditable());
+ if(!draft||(!draftDirty&&draftFrom!==activeActivityStr)){draft=cloneJSON(ACT);prepDraft();draftFrom=activeActivityStr;draftDirty=false;box.dataset.lockKey='';}
+ if(!box.firstChild||box.dataset.lockKey!==lockKey){box.dataset.lockKey=lockKey;buildEditor()}
+}
+function downloadActivity(){
+ try{
+  const act=cleanActivity(draft);validarActividad(act);
+  const url=URL.createObjectURL(new Blob([JSON.stringify(act,null,1)],{type:'application/json'})),a=document.createElement('a');
+  a.href=url;a.download=`${slug()}-actividad.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
+  editorNote('Archivo descargado.');
+ }catch(e){editorNote(e.message,true)}
+}
+function loadActivityFile(ev){
+ const f=ev.target.files&&ev.target.files[0];if(!f)return;
+ const rd=new FileReader();
+ rd.onload=()=>{
+  try{
+   const txt=String(rd.result),a=txt.indexOf('{'),b=txt.lastIndexOf('}');
+   if(a<0||b<a)throw Error('El archivo no contiene una actividad.');
+   const obj=JSON.parse(txt.slice(a,b+1));validarActividad(obj);
+   draft=obj;prepDraft();markDirty();buildEditor();editorNote('Archivo cargado: revisa y pulsa «Guardar en la sala».');
+  }catch(e){editorNote('No se pudo cargar el archivo: '+e.message+' (usa un archivo descargado desde este editor).',true)}
+  ev.target.value='';
+ };
+ rd.readAsText(f);
+}
+async function saveActivity(){
+ try{
+  if(!editorEditable())throw Error('Solo el propietario puede guardar, con la sala en espera.');
+  const act=cleanActivity(draft);validarActividad(act);
+  const str=JSON.stringify(act);if(str.length>150000)throw Error('La actividad es demasiado extensa para guardarse en la sala.');
+  const times=Array.from({length:act.preguntas.length},(_,k)=>Number.isInteger(room.questionTimes?.[k])?room.questionTimes[k]:DEFAULT_SECONDS);
+  const btn=$('editorSave');if(btn)btn.disabled=true;
+  editorNote('Guardando…');
+  await rref().update({activity:str,questionTimes:times});
+  draftDirty=false;editorNote(`Guardado: ${act.preguntas.length} pregunta${act.preguntas.length===1?'':'s'}. Los celulares ya reciben la actividad.`);
+ }catch(e){const btn=$('editorSave');if(btn&&draftDirty)btn.disabled=false;editorNote('No se pudo guardar: '+(e.message||e),true)}
+}
+async function useFileActivity(){
+ try{
+  if(!editorEditable())throw Error('Solo el propietario puede hacerlo, con la sala en espera.');
+  if(!confirm('¿Quitar la actividad guardada en la sala y usar la del archivo (contenido/actividad.js)?'))return;
+  const n=FILE_ACTIVITY.preguntas.length,times=Array.from({length:n},(_,k)=>Number.isInteger(room.questionTimes?.[k])?room.questionTimes[k]:DEFAULT_SECONDS);
+  await rref().update({activity:'',questionTimes:times});
+  draft=null;draftDirty=false;editorNote('La sala usa la actividad del archivo.');
+ }catch(e){editorNote('No se pudo cambiar: '+(e.message||e),true)}
+}
 function renderTimesPanel(){
  const box=$('timesPanel');if(!box||!room)return;
  const editable=!simulationMode&&room.owner===uid&&room.status==='lobby'&&room.quizVersion===3;
- if(!box.dataset.built){
-  box.dataset.built='1';
+ if(box.dataset.built!==String(N)){
+  box.dataset.built=String(N);box.replaceChildren();delete box.dataset.dirty;
   box.append(add('h4','Tiempo de respuesta por pregunta (aplicado en esta sala)'));
   const grid=add('div',undefined,'time-grid');
   for(let k=0;k<N;k++){const l=add('label','Pregunta '+(k+1)+' (s)');const inp=add('input');inp.type='number';inp.min='10';inp.max='180';inp.step='1';inp.inputMode='numeric';inp.id='roomTime'+k;inp.oninput=()=>{box.dataset.dirty='1'};l.append(inp);grid.append(l)}
@@ -709,7 +901,7 @@ function renderTimesPanel(){
 }
 let staleWarnedFor='';
 function roomMatchesActivity(r){return Array.isArray(r?.questionTimes)&&r.questionTimes.length===N}
-function renderHost(){if(!isHost)return;if(room&&!simulationMode&&!roomMatchesActivity(room)&&staleWarnedFor!==roomId){staleWarnedFor=roomId;alertText('Esta sala fue creada para otra actividad ('+(room.questionTimes?.length??'?')+' preguntas; la actual tiene '+N+'). Vuelve a «Mi sala» para crear una sala nueva con esta actividad.',true)}renderAttendance();renderTimesPanel();$('hostCode').textContent='Sala '+roomId;$('hostStatus').textContent=`${'SALA ÚNICA'} · ${room.mode==='survey'?'Encuesta':'Competencia'} · ${room.status==='lobby'?'En espera':room.status==='done'?'Finalizada':'En curso'}`;
+function renderHost(){if(!isHost)return;if(room&&!simulationMode&&!roomMatchesActivity(room)&&staleWarnedFor!==roomId){staleWarnedFor=roomId;alertText('Esta sala fue creada para otra actividad ('+(room.questionTimes?.length??'?')+' preguntas; la actual tiene '+N+'). Vuelve a «Mi sala» para crear una sala nueva con esta actividad.',true)}renderAttendance();renderTimesPanel();renderEditor();$('hostCode').textContent='Sala '+roomId;$('hostStatus').textContent=`${'SALA ÚNICA'} · ${room.mode==='survey'?'Encuesta':'Competencia'} · ${room.status==='lobby'?'En espera':room.status==='done'?'Finalizada':'En curso'}`;
 $('showPublicWelcome').disabled=simulationMode||room.publicView==='welcome'||room.publicView===undefined;
  $('showPublicQuestion').disabled=simulationMode||room.status!=='live'||room.publicView==='questions';
  const readyEl=$('roomReadiness');const synced=simulationMode||(loadedPeople&&loadedVotes.size===N);const empty=synced&&!people.length&&votes.every(arr=>arr.length===0);
@@ -869,7 +1061,7 @@ $('moderatorBack').onclick=()=>section('home');
 function enterModerator(){
  const user=moderatorAuth?.currentUser;
  if(!user||user.providerData.every(p=>p.providerId!=='password'))throw Error('Accede con correo y contraseña en Firebase.');
- unsubscribe();db=moderatorDb;uid=user.uid;room=null;roomId='';isHost=false;people=[];activateQuizVersion(3);votes=Array.from({length:N},()=>[]);
+ unsubscribe();db=moderatorDb;uid=user.uid;room=null;roomId='';isHost=false;people=[];applyRoomActivity(null);activateQuizVersion(3);votes=Array.from({length:N},()=>[]);
  $('moderatorPassword').value='';alertText('');
  if(user.email.toLowerCase()===MODERATOR_EMAIL.toLowerCase())section('create');
  else {section('presenterEntry');$('presenterRoomCode').value=code(new URLSearchParams(location.search).get('room'));fetchActiveRoomId().then(id=>{if(id&&$('presenterEntry')&&!$('presenterEntry').classList.contains('hidden'))$('presenterRoomCode').value=id}).catch(e=>console.warn('No se pudo recuperar el código de la sala',e))}
@@ -944,7 +1136,7 @@ $('createRoom').onclick=async()=>{
     existingRoom.mode='competition';
   }
   unsubscribe();db=moderatorDb;uid=moderatorAuth.currentUser.uid;roomId=id;isHost=true;projecting=false;
-  activateQuizVersion(3);saveOwnedRoom(id);localStorage.setItem(UNIQUE_ROOM_KEY,id);
+  applyRoomActivity(existingRoom);activateQuizVersion(3);saveOwnedRoom(id);localStorage.setItem(UNIQUE_ROOM_KEY,id);
   try{if(DEFAULT_PRESENTER_EMAIL){await moderatorDb.collection('rooms').doc(id).collection('access').doc('presenter').set({email:DEFAULT_PRESENTER_EMAIL});lastPresenterInviteLoaded=''}}
   catch(inviteError){alertText('Sala lista; revisa el acceso del segundo expositor: '+inviteError.message,true)}
   subscribe();setRoomLocation(id);
@@ -985,7 +1177,7 @@ $('join').onclick=async()=>{
   unsubscribe();sharedVoteStops.forEach(stop=>stop());sharedVoteStops=[];
   db=anonDb;uid=anonUid;roomId=enteredCode;myName=registeredName;myCountry=registeredCountry;
   /* Se muestra de inmediato la sala ya consultada; el listener en tiempo real la mantiene al día. */
-  room=existing.data();activateQuizVersion(room.quizVersion);isHost=false;projecting=false;people=[];votes=Array.from({length:N},()=>[]);
+  room=existing.data();applyRoomActivity(room);activateQuizVersion(room.quizVersion);isHost=false;projecting=false;people=[];votes=Array.from({length:N},()=>[]);
   clearVoteProblem();alertText('');subscribe();render();
   const url=new URL(location.href);url.searchParams.set('room',roomId);url.searchParams.delete('view');history.replaceState(null,'',url.toString());
  }catch(e){
@@ -1016,11 +1208,12 @@ function subscribe(){
   if(!snapshot.exists){alertText('Sala no encontrada.',true);return}
   const previous=room?.status+'-'+room?.idx+'-'+room?.reveal;const previousIdx=room?.idx;
   room=snapshot.data();
+  applyRoomActivity(room);
   activateQuizVersion(room.quizVersion);
   if(isHost&&room.idx>=0&&room.idx!==previousIdx){activeTab=room.idx;if(projecting&&room.status==='live'){projectAt=room.idx;projectView='question'}}
   if(isHost&&projecting&&new URLSearchParams(location.search).get('view')==='projection'&&room.idx>=0&&room.status==='live'){projectAt=Math.min(room.idx,N-1);projectView='question'}
-  if(observedVersion!==room.quizVersion){
-   observedVersion=room.quizVersion;loadedPeople=false;loadedVotes=new Set();
+  if(observedVersion!==room.quizVersion+':'+N){
+   observedVersion=room.quizVersion+':'+N;loadedPeople=false;loadedVotes=new Set();
    dataStops.forEach(stop=>stop());dataStops=[];
    people=[];votes=Array.from({length:N},()=>[]);
    if(isHost){
@@ -1144,9 +1337,9 @@ $('reveal').onclick=async()=>{try{
  }catch(e){alertText(e.message,true)}};
 $('finish').onclick=async()=>{try{if(isHost&&room.status==='live'&&confirm('¿Cerrar la sesión? Ya no podrán enviar respuestas.')){if(simulationMode){room.status='done';room.reveal=true;room.revealStage=3;render()}else await rref().update({status:'done',reveal:true,...(room.quizVersion>=2?{revealStage:3}:{})})}}catch(e){alertText(e.message,true)}};
 $('copyLink').onclick=async()=>{try{await navigator.clipboard.writeText(link());alertText('Enlace copiado.')}catch{alertText('Selecciona y copia el enlace visible.')}};
-$('downloadQR').onclick=()=>{const img=$('qr').querySelector('canvas');const picture=$('qr').querySelector('img');const url=img?.toDataURL('image/png')||picture?.src;if(!url)return alertText('No hay un QR disponible.',true);const a=document.createElement('a');a.href=url;a.download=`QR-${SLUG}-${roomId}.png`;a.click()};
+$('downloadQR').onclick=()=>{const img=$('qr').querySelector('canvas');const picture=$('qr').querySelector('img');const url=img?.toDataURL('image/png')||picture?.src;if(!url)return alertText('No hay un QR disponible.',true);const a=document.createElement('a');a.href=url;a.download=`QR-${slug()}-${roomId}.png`;a.click()};
 function csvCell(s){return '"'+String(s??'').replace(/"/g,'""').replace(/^[=+@\-\t\r]/,'\'$&')+'"'}
-function exportCsv(){if(!isHost)return;if(simulationMode){alertText('No se exportan datos ficticios como resultados reales.',true);return}const rows=[['sala','modo','participante','pais_declarado','pregunta','tema','respuesta','alternativa','correcta','acierto','fecha_iso']];votes.forEach((records,i)=>records.forEach(v=>{const p=people.find(x=>x.uid===v.uid);rows.push([roomId,room.mode,p?.name||'',p?.country||'',i+1,QUIZ[i].topic,v.choice+1,LETTERS[v.choice],LETTERS[QUIZ[i].correct],v.choice===QUIZ[i].correct?1:0,v.submittedAt?.toDate?.().toISOString()||''])}));const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=`resultados-${SLUG}-${roomId}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
+function exportCsv(){if(!isHost)return;if(simulationMode){alertText('No se exportan datos ficticios como resultados reales.',true);return}const rows=[['sala','modo','participante','pais_declarado','pregunta','tema','respuesta','alternativa','correcta','acierto','fecha_iso']];votes.forEach((records,i)=>records.forEach(v=>{const p=people.find(x=>x.uid===v.uid);rows.push([roomId,room.mode,p?.name||'',p?.country||'',i+1,QUIZ[i].topic,v.choice+1,LETTERS[v.choice],LETTERS[QUIZ[i].correct],v.choice===QUIZ[i].correct?1:0,v.submittedAt?.toDate?.().toISOString()||''])}));const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=`resultados-${slug()}-${roomId}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
 
 /* Análisis descriptivo: sin atribuir dominio conceptual a partir de una sola respuesta. */
 function renderLearningSummary(){

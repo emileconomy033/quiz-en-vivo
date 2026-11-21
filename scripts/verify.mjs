@@ -229,7 +229,7 @@ assert(source.includes("document.createTextNode(' pendientes')"),'Faltan pendien
 assert(source.includes("let cachedPublicQr=null,cachedPublicQrRoom=''"),'El QR no debe parpadear con actualizaciones');
 assert(source.includes("cachedPublicQrRoom!==roomId"),'El QR no responde a cambio de sala');
 assert(rules.includes("request.resource.data.get('publicView','welcome') in ['welcome','questions']"),'Reglas no restringen el estado de proyección');
-assert(rules.includes("affectedKeys().hasOnly(['status','idx','reveal','revealStage','openedAt','mode','publicView','questionTimes'])"),'Reglas no admiten el estado público o permiten otros campos');
+assert(rules.includes("affectedKeys().hasOnly(['status','idx','reveal','revealStage','openedAt','mode','publicView','questionTimes','activity'])"),'Reglas no admiten el estado público o permiten otros campos');
 assert(source.includes("url.searchParams.set('intro','1')"),'Abrir la ventana pública debe priorizar portada desde el inicio');
 assert(source.includes("if(room?.publicView==='questions')setPublicView('welcome')"),'Reabrir pantalla pública debe restaurar portada');
 assert(source.includes("let publicIntroUntilWelcome=new URLSearchParams(location.search).get('intro')==='1'"),'No hay bloqueo preventivo contra revelar pregunta anterior');

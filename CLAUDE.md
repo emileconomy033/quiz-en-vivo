@@ -14,6 +14,7 @@ Plataforma reutilizable de preguntas en vivo. Nació como la actividad «¿Realm
 ## Modelo de datos (Firestore)
 
 - `roomDirectory/current` → `{roomId, updatedAt}`: una **sala permanente** única; los participantes la consultan para entrar.
+- `rooms/{id}.activity` (opcional, JSON como texto, máx. 200 000 caracteres): actividad propia de la sala, escrita desde el editor del panel; si falta o está vacía se usa `contenido/actividad.js`. La cambia solo el propietario con la sala en `lobby`; al cambiar el número de preguntas se actualiza `questionTimes` en la misma escritura. Todos los clientes la aplican con `applyRoomActivity(room)`.
 - `rooms/{id}` → `owner, mode ('competition'), sessionKind, questionTimes[], quizVersion (3 = versión del motor, no del contenido), publicView, revealStage, status ('lobby'|'live'|'done'), idx, reveal, openedAt`.
 - `rooms/{id}/participants/{uid}`, `rooms/{id}/answers/{qid}/votes/{uid}`, `rooms/{id}/access/presenter` (correo del segundo expositor).
 - `questionTimes.length` define cuántas preguntas tiene la sala (1 a 20). El panel avisa y crea sala nueva si no coincide con la actividad cargada.

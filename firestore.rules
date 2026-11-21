@@ -63,7 +63,8 @@ service cloud.firestore {
     match /rooms/{id} {
       allow get: if signed();
       allow list: if false;
-      allow create: if moderator() && request.resource.data.keys().hasOnly(['owner','mode','sessionKind','questionTimes','quizVersion','publicView','revealStage','status','idx','reveal','openedAt','createdAt'])
+      allow create: if moderator() && request.resource.data.keys().hasOnly(['owner','mode','sessionKind','questionTimes','quizVersion','publicView','revealStage','status','idx','reveal','openedAt','createdAt','activity'])
+        && (!('activity' in request.resource.data) || (request.resource.data.activity is string && request.resource.data.activity.size() <= 200000))
         && request.resource.data.owner == request.auth.uid && ((request.resource.data.quizVersion == 3 && request.resource.data.mode == 'competition') || (request.resource.data.quizVersion == 2 && request.resource.data.mode in ['survey','competition'])) && request.resource.data.sessionKind in ['practice','official']
         && validTimes(request.resource.data.questionTimes)
         && request.resource.data.quizVersion in [2,3] && request.resource.data.revealStage == 0
@@ -72,12 +73,17 @@ service cloud.firestore {
       allow update: if (owner(id) || (coPresenter(id) && (
           (resource.data.status != 'done' && request.resource.data.status != 'lobby' && request.resource.data.idx >= resource.data.idx)
           || (resource.data.status != 'done' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['publicView'])))))
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','idx','reveal','revealStage','openedAt','mode','publicView','questionTimes'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','idx','reveal','revealStage','openedAt','mode','publicView','questionTimes','activity'])
         // Los segundos por pregunta solo los cambia el propietario mientras la sala está en espera.
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['questionTimes'])
           || (owner(id) && resource.data.status == 'lobby' && request.resource.data.status == 'lobby'
-            && request.resource.data.questionTimes.size() == resource.data.questionTimes.size()
+            && (request.resource.data.questionTimes.size() == resource.data.questionTimes.size()
+              || request.resource.data.diff(resource.data).affectedKeys().hasAny(['activity']))
             && validTimes(request.resource.data.questionTimes)))
+        // La actividad (preguntas) de la sala la cambia solo el propietario con la sala en espera.
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['activity'])
+          || (owner(id) && resource.data.status == 'lobby' && request.resource.data.status == 'lobby'
+            && request.resource.data.activity is string && request.resource.data.activity.size() <= 200000))
         && request.resource.data.get('publicView','welcome') in ['welcome','questions']
         && (request.resource.data.get('publicView','welcome') != 'questions' || request.resource.data.status in ['live','done'])
         && (request.resource.data.mode == resource.data.mode

@@ -7,7 +7,13 @@ Plataforma de preguntas en vivo para clases, talleres y eventos. Los participant
 - **Pantalla pública:** versión reducida de los resultados y del cierre.
 - **Técnica:** un solo `index.html` + Firebase (Auth anónima, Firestore) + GitHub Pages. Sin servidor propio.
 
-## Crear una actividad nueva (15 minutos)
+## Crear una actividad: dos caminos
+
+**A. Desde el panel (sin tocar archivos).** Con la sala en espera, el propietario abre «Preguntas de la actividad» en su panel: escribe las preguntas, agrega alternativas, marca la correcta y anota qué decir si la mayoría acierta, si elige cada alternativa errónea o si el grupo se divide. Al guardar, la actividad queda en la sala y los celulares la reciben solos. Se puede descargar como `.json`, cargar desde archivo o volver a la actividad del archivo.
+
+**B. Desde un archivo** (para actividades largas, con teoría y citas):
+
+### Crear una actividad desde archivo (15 minutos)
 
 1. Abre [`contenido/actividad.js`](contenido/actividad.js) y reemplaza marca, preguntas y cierre. La guía campo por campo está en [`GUIA_ACTIVIDAD.md`](GUIA_ACTIVIDAD.md).
 2. `npm install` (una sola vez) y `npm test`. Las pruebas validan el contenido y avisan con mensajes claros si falta algo.
