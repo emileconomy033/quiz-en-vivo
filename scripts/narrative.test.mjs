@@ -66,6 +66,11 @@ ev('room.idx=3;room.revealStage=3;render()');
 const closeSc=ev('closingScript([{i:0,n:20,c:18},{i:1,n:20,c:6}])');assert(closeSc.paras.some(p=>p.includes('Lo más firme')),'cierre menciona lo más firme y lo más difícil');
 const closeSmall=ev('closingScript([{i:0,n:3,c:0}])');assert(closeSmall.paras[0].includes('todavía es pronto'),'cierre neutro con pocas respuestas');
 
+assert(cl.includes('verdad aplicada fuera de su rango'),'cierre incluye la reflexión sobre los errores');
+ev('activeTab=1;render()');
+assert(d.getElementById('hostChart').textContent.includes('equivalencia funcional'),'dato no intuitivo visible en P2');
+ev('activeTab=4;render()');
+
 // 4) Cierre en la pantalla pública
 ev(`room.status='done';projecting=true;renderProjection()`);
 const pub=d.getElementById('projectChart').textContent;

@@ -58,4 +58,13 @@ const dom2=new JSDOM(pageWith('contenido/actividad.js'),{runScripts:'dangerously
 await new Promise(r=>setTimeout(r,300));
 assert.equal(dom2.window.document.getElementById('brandTitle').textContent,'Título de tu actividad');
 assert.equal(dom2.window.eval('N'),3);
+// Ejemplo de una sola pregunta: ficha con guion para el error dominante
+const dom3=new JSDOM(pageWith('ejemplos/muchas-variables-pocos-casos.js'),{runScripts:'dangerously',url:'https://example.test/',pretendToBeVisual:true});
+await new Promise(r=>setTimeout(r,300));
+const w3=dom3.window,d3=w3.document;
+w3.eval(`isHost=true;uid='o';roomId='MV0001';room={owner:'o',status:'live',mode:'competition',quizVersion:3,idx:0,reveal:true,revealStage:3,publicView:'questions',questionTimes:[60]};
+people=Array.from({length:10},(_,k)=>({uid:'p'+k,name:'P'+k,ready:true}));votes=[Array.from({length:10},(_,k)=>({uid:'p'+k,choice:k<6?0:2}))];
+loadedPeople=true;loadedVotes=new Set([0]);activeTab=0;rref=()=>({update:async()=>{}});section('host');render()`);
+const t3=d3.getElementById('hostChart').textContent;
+for(const s of ['Pregunta 1 · Variables y casos','Para decir','menos variables, más casos por variable','Algo que no es intuitivo','Lijphart (1971)'])assert(t3.includes(s),'ejemplo de una pregunta: falta «'+s+'»');
 console.log('PLANTILLA OK');process.exit(0);

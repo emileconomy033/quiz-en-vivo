@@ -34,12 +34,14 @@ El texto admite `**frase**` para resaltar una idea (amarillo en el guion hablado
 | `hint` | Por alternativa, una frase hablada de por qué tienta y por qué falla. Se usa en el guion «Para decir» cuando esa alternativa fue la más elegida. |
 | `core` | Idea con la que termina el guion «Para decir». |
 | `take` | Idea para llevarse en el cierre (si falta se usa `key`, luego `why`). |
+| `dato` | Recuadro «Algo que no es intuitivo» dentro del respaldo plegado. |
 | `strengthen`, `discuss`, `example`, `bridge`, `transfer`, `question`, `time`, `refs` | Material de apoyo plegado. |
 
 Los arreglos por alternativa (`mis`, `dis`, `hint`, `trap`) deben tener **una entrada por alternativa**, en el mismo orden que `a`.
 
 ## 3. Cierre (`cierre`, todo opcional)
 
+- `reflexion`: párrafo que se dice antes de la frase final, para una mirada de conjunto (por ejemplo, qué tenían en común los errores del grupo).
 - `frase`: última frase del guion de cierre.
 - `fraseCorta`: línea final de la pantalla pública.
 - `fraseFinal`: frase sugerida para despedir la sesión.

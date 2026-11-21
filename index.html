@@ -507,6 +507,7 @@ function hostCard(i,n,good,q){
  if(G.recall){const call=add('div',undefined,'theory-callout');call.append(add('span','Qué dice la teoría','kick'),richBlock('p',G.recall));if(G.cite)call.append(add('span',G.cite,'cite'));sup.append(call)}
  if(s.top&&G.dis&&G.dis[s.top.j]){sup.append(add('span',`Sobre la alternativa ${LETTER(s.top.j)}`,'mini-kick'),richBlock('p',G.dis[s.top.j],'disambig'))}
  if(G.principle)sup.append(add('span',`Por qué la ${LETTER(q.correct)} es la correcta`,'mini-kick'),add('p',G.principle));
+ if(G.dato)sup.append(add('span','Algo que no es intuitivo','mini-kick'),richBlock('p',G.dato));
  if(G.strengthen)sup.append(richBlock('p',G.strengthen,'strengthen'));
  const alts=persistOpen(add('details',undefined,'sub'),'alts'+i);
  alts.append(add('summary','Ver todas las alternativas'));
@@ -545,6 +546,7 @@ function closingScript(rows){
   const q=QUIZ[worst.i],G=PEDAGOGY[worst.i],e=q.a.map((_,j)=>({j,n:countFor(worst.i,j)})).filter(z=>z.j!==q.correct&&z.n).sort((a,b)=>b.n-a.n)[0];
   if(e&&G.hint&&G.hint[e.j])paras.push(`Donde más se desvió el grupo fue en ${q.topic}, con la ${LETTER(e.j)}. ${G.hint[e.j]}`);
  }
+ if(CIERRE.reflexion)paras.push(CIERRE.reflexion);
  paras.push(CIERRE.frase||'Gracias por participar: lo valioso de hoy fue la conversación que abrieron las respuestas del grupo.');
  const words=paras.join(' ').replace(/\*\*/g,'').split(/\s+/).length;
  return {paras,seconds:Math.round(words/2.3/5)*5,rate,total};

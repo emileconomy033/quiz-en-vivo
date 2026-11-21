@@ -38,7 +38,8 @@ window.ACTIVIDAD = {
  "cierre": {
   "frase": "Todo gira alrededor de una pregunta de Sartori: **«comparable, ¿en qué aspecto?»** (1999, p. 36). Y esto es solo el primer paso: según Panebianco (1999), comparar sirve para controlar hipótesis y, en última instancia, para explicar.",
   "fraseCorta": "Seguimos con la pregunta que ordena todo lo anterior: **«comparable, ¿en qué aspecto?»** (Sartori, 1999, p. 36).",
-  "fraseFinal": "Antes de comparar: ¿qué propiedad, definida cómo, en qué casos y con qué equivalencia?"
+  "fraseFinal": "Antes de comparar: ¿qué propiedad, definida cómo, en qué casos y con qué equivalencia?",
+  "reflexion": "Una última mirada a los errores de hoy: casi todos eran una **verdad aplicada fuera de su rango**. Es cierto que el contexto importa, que estirar conceptos es un riesgo y que una unidad común es un buen comienzo; el error estuvo en llevar esas ideas más lejos de lo que aguantan."
  },
  "preguntas": [
   {
@@ -151,7 +152,8 @@ window.ACTIVIDAD = {
     null,
     "Es la trampa del mismo nombre: el indicador se llama igual pero puede cubrir cosas distintas, por ejemplo gobierno central frente a gobierno general. Hay que revisar definición, cobertura y período.",
     "Pedir que los niveles de gasto se parezcan confunde comparabilidad con coincidencia de valores: se puede comparar precisamente porque los valores difieren."
-   ]
+   ],
+   "dato": "Lo contrario también ocurre: a veces hay que usar **indicadores distintos en cada contexto** para medir lo mismo (equivalencia funcional). Medir con la misma vara no garantiza medir lo mismo."
   },
   {
    "topic": "Sartori",
@@ -263,7 +265,8 @@ window.ACTIVIDAD = {
     "Menos minutos suena a más eficiencia, pero puede ser solo que se mide una etapa más corta. Antes de juzgar hay que saber si miden lo mismo.",
     "Los minutos son la unidad, no el indicador. Comparten palabra, pero no el evento inicial ni el final.",
     null
-   ]
+   ],
+   "dato": "Cuanto más limpio se ve un número, menos nos preguntamos si mide lo mismo. **La validez conceptual va antes que la aritmética**: 40 entre 20 es una cuenta exacta sobre una pregunta mal planteada."
   }
  ],
  "transferencia": [

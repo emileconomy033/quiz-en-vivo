@@ -19,6 +19,7 @@ Actividades guardadas como ejemplo en [`ejemplos/`](ejemplos/):
 | Archivo | Qué es |
 |---|---|
 | `metodo-comparado-grupo1.js` | Edición completa «¿Realmente sabemos comparar?» (ICAP, Grupo 1) con todos los campos opcionales. |
+| `muchas-variables-pocos-casos.js` | Actividad de una pregunta sobre «muchas variables, pocos casos» (¿problema que se resuelve o tensión que se administra?). Verifica las páginas de las citas con la lectura del curso. |
 | `plantilla-en-blanco.js` | Plantilla comentada, lista para llenar. |
 
 Para activar una de ellas: `npm run actividad -- ejemplos/metodo-comparado-grupo1.js`.

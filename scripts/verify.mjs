@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync} from 'node:fs';import fs from 'node:fs';
 import {Script, runInNewContext} from 'node:vm';
 
 const html=readFileSync('index.html','utf8');
@@ -32,6 +32,9 @@ for(let i=0;i<4;i++){
 // Plantilla activa: contenido mínimo válido y con pregunta de 3 alternativas
 const blank=loadActivity(readFileSync('contenido/actividad.js','utf8'));
 assert(blank.QUIZ.length>=1&&blank.QUIZ.every(q=>q.a.length>=2&&q.a.length<=6),'La plantilla activa debe ser válida');
+// Todos los ejemplos guardados deben ser actividades válidas
+for(const f of fs.readdirSync('ejemplos').filter(x=>x.endsWith('.js'))){const r=loadActivity(readFileSync('ejemplos/'+f,'utf8'));assert(r.QUIZ.length>=1,'ejemplo válido: '+f)}
+assert(readFileSync('ejemplos/metodo-comparado-grupo1.js','utf8').includes('verdad aplicada fuera de su rango'),'reflexión de cierre integrada');
 // Cualquier actividad: 7 preguntas con 6 alternativas, solo campos obligatorios
 const big={marca:{},preguntas:Array.from({length:7},(_,i)=>({q:'Pregunta '+i,a:['a','b','c','d','e','f'],correct:i%6}))};
 const bigLoaded=loadActivity('window.ACTIVIDAD='+JSON.stringify(big));
