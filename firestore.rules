@@ -1,0 +1,151 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function moderator() {
+      return signed()
+        && request.auth.token.email == 'emil.economia@gmail.com'
+        && request.auth.token.firebase.sign_in_provider == 'password';
+    }
+    // De 1 a 20 preguntas; cada tiempo es un entero de 10 a 180 segundos (las reglas no admiten bucles).
+    function validTimes(t) {
+      return t is list
+        && t.size() >= 1 && t.size() <= 20
+        && (t.size() <= 0 || (t[0] is int && t[0] >= 10 && t[0] <= 180))
+        && (t.size() <= 1 || (t[1] is int && t[1] >= 10 && t[1] <= 180))
+        && (t.size() <= 2 || (t[2] is int && t[2] >= 10 && t[2] <= 180))
+        && (t.size() <= 3 || (t[3] is int && t[3] >= 10 && t[3] <= 180))
+        && (t.size() <= 4 || (t[4] is int && t[4] >= 10 && t[4] <= 180))
+        && (t.size() <= 5 || (t[5] is int && t[5] >= 10 && t[5] <= 180))
+        && (t.size() <= 6 || (t[6] is int && t[6] >= 10 && t[6] <= 180))
+        && (t.size() <= 7 || (t[7] is int && t[7] >= 10 && t[7] <= 180))
+        && (t.size() <= 8 || (t[8] is int && t[8] >= 10 && t[8] <= 180))
+        && (t.size() <= 9 || (t[9] is int && t[9] >= 10 && t[9] <= 180))
+        && (t.size() <= 10 || (t[10] is int && t[10] >= 10 && t[10] <= 180))
+        && (t.size() <= 11 || (t[11] is int && t[11] >= 10 && t[11] <= 180))
+        && (t.size() <= 12 || (t[12] is int && t[12] >= 10 && t[12] <= 180))
+        && (t.size() <= 13 || (t[13] is int && t[13] >= 10 && t[13] <= 180))
+        && (t.size() <= 14 || (t[14] is int && t[14] >= 10 && t[14] <= 180))
+        && (t.size() <= 15 || (t[15] is int && t[15] >= 10 && t[15] <= 180))
+        && (t.size() <= 16 || (t[16] is int && t[16] >= 10 && t[16] <= 180))
+        && (t.size() <= 17 || (t[17] is int && t[17] >= 10 && t[17] <= 180))
+        && (t.size() <= 18 || (t[18] is int && t[18] >= 10 && t[18] <= 180))
+        && (t.size() <= 19 || (t[19] is int && t[19] >= 10 && t[19] <= 180));
+    }
+    function activeRoom(id) {
+      return exists(/databases/$(database)/documents/roomDirectory/current)
+        && get(/databases/$(database)/documents/roomDirectory/current).data.roomId == id;
+    }
+    function parent(id) { return get(/databases/$(database)/documents/rooms/$(id)); }
+    function owner(id) { return signed() && parent(id).data.owner == request.auth.uid; }
+    function participant(id) { return signed() && exists(/databases/$(database)/documents/rooms/$(id)/participants/$(request.auth.uid)); }
+    function coPresenter(id) {
+      return signed() && request.auth.token.firebase.sign_in_provider == 'password'
+        && exists(/databases/$(database)/documents/rooms/$(id)/access/presenter)
+        && get(/databases/$(database)/documents/rooms/$(id)/access/presenter).data.email == request.auth.token.email;
+    }
+    function presenter(id) { return owner(id) || coPresenter(id); }
+    function approvedRoom(id) { return presenter(id) || participant(id); }
+    match /roomDirectory/{key} {
+      allow get: if key == 'current' && signed();
+      allow list: if false;
+      // A single permanent room, controlled by the authenticated account owner.
+      allow create, update: if key == 'current' && moderator()
+        && request.resource.data.keys().hasOnly(['roomId','updatedAt'])
+        && request.resource.data.roomId is string
+        && request.resource.data.roomId.size() >= 6
+        && request.resource.data.roomId.size() <= 8
+        && request.resource.data.updatedAt == request.time
+        && getAfter(/databases/$(database)/documents/rooms/$(request.resource.data.roomId)).data.owner == request.auth.uid
+        && getAfter(/databases/$(database)/documents/rooms/$(request.resource.data.roomId)).data.quizVersion == 3;
+      allow delete: if false;
+    }
+    match /rooms/{id} {
+      allow get: if signed();
+      allow list: if false;
+      allow create: if moderator() && request.resource.data.keys().hasOnly(['owner','mode','sessionKind','questionTimes','quizVersion','publicView','revealStage','status','idx','reveal','openedAt','createdAt'])
+        && request.resource.data.owner == request.auth.uid && ((request.resource.data.quizVersion == 3 && request.resource.data.mode == 'competition') || (request.resource.data.quizVersion == 2 && request.resource.data.mode in ['survey','competition'])) && request.resource.data.sessionKind in ['practice','official']
+        && validTimes(request.resource.data.questionTimes)
+        && request.resource.data.quizVersion in [2,3] && request.resource.data.revealStage == 0
+        && request.resource.data.status == 'lobby' && request.resource.data.idx == -1 && request.resource.data.reveal == false
+        && request.resource.data.publicView == 'welcome';
+      allow update: if (owner(id) || (coPresenter(id) && (
+          (resource.data.status != 'done' && request.resource.data.status != 'lobby' && request.resource.data.idx >= resource.data.idx)
+          || (resource.data.status != 'done' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['publicView'])))))
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','idx','reveal','revealStage','openedAt','mode','publicView','questionTimes'])
+        // Los segundos por pregunta solo los cambia el propietario mientras la sala está en espera.
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['questionTimes'])
+          || (owner(id) && resource.data.status == 'lobby' && request.resource.data.status == 'lobby'
+            && request.resource.data.questionTimes.size() == resource.data.questionTimes.size()
+            && validTimes(request.resource.data.questionTimes)))
+        && request.resource.data.get('publicView','welcome') in ['welcome','questions']
+        && (request.resource.data.get('publicView','welcome') != 'questions' || request.resource.data.status in ['live','done'])
+        && (request.resource.data.mode == resource.data.mode
+          || (owner(id) && resource.data.get('quizVersion',1) == 3
+            && resource.data.mode == 'survey' && request.resource.data.mode == 'competition'
+            && ((resource.data.status == 'lobby' && request.resource.data.status == 'lobby')
+              || (resource.data.status == 'done' && request.resource.data.status == 'lobby')))) && request.resource.data.sessionKind == resource.data.sessionKind && request.resource.data.owner == resource.data.owner
+        && (!('revealStage' in request.resource.data) || (request.resource.data.revealStage is int && request.resource.data.revealStage >= 0 && request.resource.data.revealStage <= 3))
+        && request.resource.data.status in ['lobby','live','done'] && request.resource.data.idx >= -1 && request.resource.data.idx < resource.data.get('questionTimes',[1,2,3,4,5,6]).size();
+      allow delete: if false;
+      match /participants/{pid} {
+        // El usuario puede consultar su propio documento, incluso antes de crearlo.
+        // La lista completa queda restringida a miembros de la sala.
+        allow get: if presenter(id) || (signed() && request.auth.uid == pid);
+        allow list: if presenter(id);
+        allow create: if signed() && activeRoom(id) && request.auth.uid == pid && parent(id).data.status != 'done'
+          && request.resource.data.keys().hasOnly(['name','country','joinedAt'])
+          && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 35
+          && request.resource.data.country is string && request.resource.data.country.size() <= 40
+          && request.resource.data.joinedAt == request.time;
+        // A registered attendee may confirm readiness once, while the room is waiting.
+        allow update: if signed() && activeRoom(id) && request.auth.uid == pid
+          && parent(id).data.status == 'lobby'
+          && resource.data.get('ready',false) == false
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ready','readyAt'])
+          && request.resource.data.ready == true
+          && request.resource.data.readyAt == request.time;
+        // El propietario puede quitar un registro abandonado o duplicado en la sala de espera, o limpiar al terminar.
+        allow delete: if owner(id) && parent(id).data.status in ['lobby','done'];
+      }
+      match /answers/{qid}/votes/{pid} {
+        // Participantes solo pueden consultar votos cuando ya se revelaron, o al cerrar.
+        // En encuesta, los resultados individuales quedan reservados al moderador hasta el cierre.
+        // La lectura de votos identificables está reservada al moderador y a su autor.
+        // Las visualizaciones grupales se proyectan desde la pantalla del moderador.
+        allow get: if presenter(id) || (signed() && request.auth.uid == pid && participant(id));
+        allow list: if presenter(id);
+        allow create: if signed() && activeRoom(id) && request.auth.uid == pid && participant(id)
+          && request.resource.data.keys().hasOnly(['choice','submittedAt'])
+          && request.resource.data.choice is int && request.resource.data.choice >= 0 && request.resource.data.choice < 6
+          && request.resource.data.submittedAt == request.time
+          && parent(id).data.status == 'live'
+          && ((parent(id).data.get('quizVersion',1) != 3 && parent(id).data.mode == 'survey' && int(qid) >= 0 && int(qid) < parent(id).data.get('questionTimes',[1,2,3,4,5,6]).size())
+            || (parent(id).data.mode == 'competition' && int(qid) == parent(id).data.idx
+              && parent(id).data.reveal == false && parent(id).data.get('revealStage',0) == 0 && request.time <= parent(id).data.openedAt + duration.value(parent(id).data.get('questionTimes',[40,40,40,40,40,40])[int(qid)],'s')));
+        // Puede corregirse la opción propia mientras la pregunta permanezca abierta.
+        // La última escritura aceptada por el servidor es la respuesta definitiva.
+        allow update: if signed() && activeRoom(id) && request.auth.uid == pid && participant(id)
+          && request.resource.data.keys().hasOnly(['choice','submittedAt'])
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['choice','submittedAt'])
+          && request.resource.data.choice is int && request.resource.data.choice >= 0 && request.resource.data.choice < 6
+          && request.resource.data.submittedAt == request.time
+          && parent(id).data.status == 'live'
+          && ((parent(id).data.get('quizVersion',1) != 3 && parent(id).data.mode == 'survey' && int(qid) >= 0 && int(qid) < parent(id).data.get('questionTimes',[1,2,3,4,5,6]).size())
+            || (parent(id).data.mode == 'competition' && int(qid) == parent(id).data.idx
+              && parent(id).data.reveal == false && parent(id).data.get('revealStage',0) == 0
+              && request.time <= parent(id).data.openedAt + duration.value(parent(id).data.get('questionTimes',[40,40,40,40,40,40])[int(qid)],'s')));
+        allow delete: if owner(id) && parent(id).data.status in ['lobby','done'];
+      }
+      match /access/{key} {
+        allow get: if key == 'presenter' && (owner(id) || (signed() && request.auth.token.firebase.sign_in_provider == 'password' && resource.data.email == request.auth.token.email));
+        allow list: if false;
+        allow create, update: if key == 'presenter' && owner(id)
+          && request.resource.data.keys().hasOnly(['email'])
+          && request.resource.data.email is string
+          && request.resource.data.email.size() >= 5 && request.resource.data.email.size() <= 254;
+        allow delete: if key == 'presenter' && owner(id);
+      }
+    }
+  }
+}
